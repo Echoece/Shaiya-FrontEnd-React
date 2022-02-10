@@ -1,0 +1,13 @@
+.carousal {
+    padding-top: 30px;
+    height: 400px;
+    width: 50%;
+    margin: 0 auto;
+    opacity: 90%;
+}
+
+.slider_image{
+    margin: 10px;
+    background: no-repeat center;
+    background-size: contain;
+}

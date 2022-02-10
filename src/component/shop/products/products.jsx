@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import Input from "../../util/form/input";
-import test from '../../../assets/test1.png'
+import test from '../../../assets/top1.png'
+import './product.css'
 
 class Products extends Component {
     state={
@@ -11,26 +12,31 @@ class Products extends Component {
     render() {
         const {product} = this.props;
         return (
-            <Fragment>
-                <div className="card m-2 w-25 h-auto bg-light">
-                    <img
-                        src={test}
-                        alt=""
-                        className="img-fluid h-25 w-25"/>
+                <div className="m-2 w-25 h-auto custom_card">
+                    <div className="text-center">
+                        <img
+                            src={test}
+                            alt=""
+                            className="img-fluid  "/>
+                    </div>
+
                     <div className="card-body">
                         <div className="row">
-                            <div className="card-title">
-                                <h5 className='text-center'>{product.name}</h5>
-                                <h6>price: {product.price}</h6>
-                                <p>{product.category}</p>
+                            <div className="card-title text-white">
+                                <h4 className='text-center'>{product.name}</h4>
+                                <h6 className='text-center'>Price: {product.price}</h6>
+                                <h6 className='text-center'>Type: {product.category}</h6>
                             </div>
                         </div>
                         <hr/>
-                        <p>
-                            {product.description}
-                        </p>
+                        <div className='text-white'>
+                            <p className='text-center overflow-hidden'>
+                                {product.description}
+                            </p>
+                        </div>
+
                         {/* const {name,label,value,onChange,error,help_text,type,placeholder} = this.props;*/}
-                        <div className='w-50'>
+                        <div className='text-center'>
                             <Input name='quantity'
                                    help_text='max amount : 50'
                                    label='Amount'
@@ -47,13 +53,13 @@ class Products extends Component {
                         </div>
                     </div>
                 </div>
-            </Fragment>
+
         );
     }
 
     QuantityChangeHandle =(event)=> {
         const value = parseInt(event.currentTarget.value);
-        value <= 50? this.setState({quantity:value }): this.setState({quantity: 50});
+        value <= 50? this.setState({quantity:value }): this.setState({quantity: ''});
     }
 
 

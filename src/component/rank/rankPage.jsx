@@ -5,133 +5,13 @@ import RankTable from "./rankTable";
 import Pagination from "../util/pagination";
 import SearchBox from "../util/searchBox";
 import ListGroup from "../util/listGroup";
+import Loading from "../util/loading";
+import {getRankData} from "../../service/rank/rankService";
 
 
 class RankPage extends Component {
     state = {
-        allPlayer: [
-            {
-                "map": 42,
-                "level": 80,
-                "family": 3,
-                "charId": 1,
-                "charName": "DDD",
-                "del": 0,
-                "k1": 400000,
-                "loginStatus": 0,
-                "userUID": 1
-            },
-            {
-                "map": 42,
-                "level": 1,
-                "family": 3,
-                "charId": 2,
-                "charName": "CCC",
-                "del": 0,
-                "k1": 6000,
-                "loginStatus": 0,
-                "userUID": 2
-            },
-            {
-                "map": 70,
-                "level": 80,
-                "family": 3,
-                "charId": 3,
-                "charName": "FFF",
-                "del": 1,
-                "k1": 12333,
-                "loginStatus": 0,
-                "userUID": 2
-            },
-            {
-                "map": 0,
-                "level": 80,
-                "family": 0,
-                "charId": 4,
-                "charName": "EEE",
-                "del": 0,
-                "k1": 170,
-                "loginStatus": 0,
-                "userUID": 3
-            },
-            {
-                "map": 42,
-                "level": 80,
-                "family": 2,
-                "charId": 5,
-                "charName": "BBB",
-                "del": 0,
-                "k1": 350000,
-                "loginStatus": 0,
-                "userUID": 1
-            },
-            {
-                "map": 2,
-                "level": 80,
-                "family": 2,
-                "charId": 6,
-                "charName": "XXX",
-                "del": 0,
-                "k1": 50000,
-                "loginStatus": 0,
-                "userUID": 1
-            },
-            {
-                "map": 1,
-                "level": 1,
-                "family": 0,
-                "charId": 7,
-                "charName": "JJJJ",
-                "del": 0,
-                "k1": 700000,
-                "loginStatus": 0,
-                "userUID": 3
-            },
-            {
-                "map": 42,
-                "level": 80,
-                "family": 0,
-                "charId": 8,
-                "charName": "RRR",
-                "del": 0,
-                "k1": 400000,
-                "loginStatus": 0,
-                "userUID": 10
-            },
-            {
-                "map": 42,
-                "level": 1,
-                "family": 1,
-                "charId": 9,
-                "charName": "test",
-                "del": 0,
-                "k1": 50,
-                "loginStatus": 0,
-                "userUID": 10
-            },
-            {
-                "map": 42,
-                "level": 1,
-                "family": 0,
-                "charId": 10,
-                "charName": "addasd",
-                "del": 1,
-                "k1": 1,
-                "loginStatus": 0,
-                "userUID": 10
-            },
-            {
-                "map": 42,
-                "level": 1,
-                "family": 0,
-                "charId": 11,
-                "charName": "shutdown",
-                "del": 1,
-                "k1": 0,
-                "loginStatus": 0,
-                "userUID": 10
-            }
-        ],
+        allPlayer: [],
         allOptions: [
             {_id: "", name: "All"},
             {_id: 80, name: "Level 70"},
@@ -141,96 +21,108 @@ class RankPage extends Component {
         currentPage: 1,
         pageCount: 50,
         searchQuery: '',
-        selectedLevel: null,
+        selectedLevel:  null,
         sortColumn: {path: 'k1', order: 'desc'}
     }
 
-
-    componentDidMount() {
-        // const charData = get data from api; then setstate into all player
+    async componentDidMount() {
+        const {data} = await getRankData();
+        this.setState({allPlayer: data});
     }
 
+    /*blank balls bars bubbles cubes cylon spin spinningBubbles spokes
+    */
 
     render() {
+        /*const loaderType= ['balls','bars','bubbles','cubes','spin','spinningBubbles','spokes']
+        console.log(Math.floor(Math.random() * 10));*/
         // if no data, do nothing
         if (this.state.allPlayer.length === 0)
-            return <p>there is no movies to show</p>
+            return (
+                <div className='container d-flex justify-content-center'>
+                    <Loading color='#79edda' type='bubbles'/>
+                </div>
+            )
         // else print table
+
+
         const {searchQuery, allOptions, pageCount, currentPage, selectedLevel, sortColumn} = this.state;
-        const {totalCount, data:players} = this.getPageData();
+        const {totalCount,data: players} = this.getPageData();
 
         return (
-            <div className=" row">
+            <div className="d-flex">
                 <div className="col-2">
                     <ListGroup Items={allOptions}
-                               selectedGenre={selectedLevel}
+                               selectedOption={selectedLevel}
                                onItemSelect={this.handleOptionSelect}/>
                 </div>
                 <div className="container col-8">
-                        <h1 className="h1 text-center">Player Ranking Page</h1>
-                        <SearchBox value={searchQuery} onChange={this.handleSearch} />
-                        <RankTable charData={players}
-                                   sortColumn={sortColumn}
-                                   onLike={this.handleLike}
-                                   onDelete={this.handleDelete}
-                                   onSort={this.handleSort}
-                        />
-
-                        <Pagination itemCount={totalCount}
-                                    pageSize={pageCount}
-                                    currentPage={currentPage}
-                                    onPageChange={this.handlePageChange}/>
-                    </div>
+                    <h1 className="text-center">Player Ranking Page</h1>
+                    <h5 className='text-danger '>Click on a player name to see detailed stats</h5>
+                    <SearchBox value={searchQuery} onChange={this.handleSearch}/>
+                    <RankTable charData={players}
+                               sortColumn={sortColumn}
+                               onLike={this.handleLike}
+                               onDelete={this.handleDelete}
+                               onSort={this.handleSort}
+                    />
+                    <Pagination itemCount={totalCount}
+                                pageSize={pageCount}
+                                currentPage={currentPage}
+                                onPageChange={this.handlePageChange}/>
+                </div>
             </div>
-
-
         );
+
     }
 
-    getPageData = ()=>{
-        const {allPlayer,searchQuery,sortColumn,currentPage,pageCount,selectedLevel} = this.state;
-
+    // filtering, sorting and searching the page data.
+    getPageData = () => {
+        const {allPlayer, searchQuery, sortColumn, currentPage, pageCount, selectedLevel} = this.state;
         let filtered;
         // adding faction data
-        filtered=allPlayer.filter(element=> (element.family===0 || element.family===1)? element.faction="Alliance of Light": element.faction="Union of Fury"  );
+        filtered = allPlayer.filter(element => (element.family === 0 || element.family === 1) ? element.faction = "Alliance of Light" : element.faction = "Union of Fury");
+
+        //const unique = [...new Set(filtered)]; or can use lodash uniqby function
+
         // searching function
-        if(searchQuery){
-            filtered= allPlayer.filter(
-                element=> element.charName.toLowerCase().startsWith(searchQuery.toLowerCase())
+        if (searchQuery) {
+            filtered = allPlayer.filter(
+                element => element.charName.toLowerCase().startsWith(searchQuery.toLowerCase())
             );
         }
         // list Group
-        else if(selectedLevel && selectedLevel._id)
-            filtered=allPlayer.filter( element=> element.level === selectedLevel._id);
+        else if (selectedLevel && selectedLevel._id)
+            filtered = allPlayer.filter(element => element.level === selectedLevel._id);
         // sorting
-        const sorted = _.orderBy(filtered, [sortColumn.path],[sortColumn.order]);
+        const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
         // pagination
-        const players =paginate(sorted,currentPage,pageCount);
+        const players = paginate(sorted, currentPage, pageCount);
 
-        return {totalCount: filtered.length,data:players};
+        return {totalCount: filtered.length, data: players};
     };
 
-    handlePageChange = (pageNumber)=>{
-        this.setState({currentPage:pageNumber});
+    handlePageChange = (pageNumber) => {
+        this.setState({currentPage: pageNumber});
     };
 
-    handleSearch= (query)=>{
-        this.setState({searchQuery:query, selectedLevel:null,currentPage:1})
+    handleSearch = (query) => {
+        this.setState({searchQuery: query, selectedLevel: null, currentPage: 1})
     };
 
 
-    handleLike = (player)=>{
+    handleLike = (player) => {
         const players = [...this.state.allPlayer];
         const index = players.indexOf(player);
-        players[index].liked=!players[index].liked;
-        this.setState({allPlayer:players});
+        players[index].liked = !players[index].liked;
+        this.setState({allPlayer: players});
     }
 
-    handleOptionSelect = (Level)=> {
-        this.setState({selectedLevel:Level,searchQuery:'', currentPage:1})
+    handleOptionSelect = (Level) => {
+        this.setState({selectedLevel: Level, searchQuery: '', currentPage: 1})
     }
 
-    handleSort= (sortColumn)=> {
+    handleSort = (sortColumn) => {
         this.setState({sortColumn})
     }
 }

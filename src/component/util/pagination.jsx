@@ -7,8 +7,8 @@ const Pagination = (props) => {
     const {itemCount,pageSize,currentPage,onPageChange}=props;
 
     //getting pages array  (lodash function)
-    const pagesCount =Math.ceil(itemCount/pageSize);
-    if(pagesCount===1)
+    const pagesCount = Math.ceil(itemCount/pageSize);
+    if(pagesCount === 1)
         return null;
     const pages=_.range(1,pagesCount+1);
 
@@ -17,7 +17,7 @@ const Pagination = (props) => {
         <nav>
             <ul className="pagination">
                 {pages.map(element =>
-                    <li key={element} className={element===currentPage?"page-item active": "page-item"}>
+                    <li key={element} className={element===currentPage?"page-item active  m-1": "page-item m-1"}>
                         <Link to="#" className="page-link"
                            onClick={()=> onPageChange(element)}>
                             {element}

@@ -12,10 +12,12 @@ class TableBody extends Component {
     render() {
         const {data,columns} = this.props;
         let id = 0;
+        let serial =0;
         return (
             <tbody>
             {data.map(item =>(
-                <tr key={item.charId}>
+                <tr key={item.charId} >
+                    <td>{++serial}</td>
                     {columns.map(element=>
                         <td key={++id}>
                             {this.renderCell(item,element)}

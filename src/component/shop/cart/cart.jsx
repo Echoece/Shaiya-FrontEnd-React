@@ -1,19 +1,29 @@
 import React, {Component} from 'react';
+import './cart.css';
 
 class Cart extends Component {
 
     render() {
-        const {items, deleteAll, deleteOne} = this.props;
+        const {status,items, deleteAll, deleteOne, buyAll} = this.props;
 
-        if (items.length === 0)
+        if (status!=='shopping' && status=== 'success')
+            return <h1 className='text-center text-success'>Purchase Successful</h1>
+        else if (status!=='shopping' && status === 'failed')
+            return <h1 className='text-center text-danger'>Not Enough Point....</h1>
+
+        else if (items.length === 0)
             return <p>Cart is Empty</p>
 
         return (
-            <div className='container'>
-                available money = 100000 DP
+            <div className='container cart'>
+                <div className='text-end'>
+                    <h4>Balance<br/></h4>
+                    <b>100000 </b>DP
+                </div>
+                <br/> <br/>
 
-                <div className='text-center'>
-                    Showing total of <b>{items.length} </b>items in cart
+                <div className='text-end'>
+                     Total <b>{items.length} </b>items in cart
                 </div>
 
                 <hr/>
@@ -54,13 +64,13 @@ class Cart extends Component {
 
                 <hr/>
 
-                <div className='text-center'>
+                <div className='text-end'>
                     Total Price : <b>{this.totalPrice(items)}</b> DP
                 </div>
 
-                <div>
+                <div className='flex-row  text-end'>
                     <button className="btn btn-primary btn-sm"
-                            onClick={this.CartBuyAllHandler}>
+                            onClick={buyAll}>
                         Buy all
                     </button>
                     <button className="btn btn-danger m-2 btn-sm"

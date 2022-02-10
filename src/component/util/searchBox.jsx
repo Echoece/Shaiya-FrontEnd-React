@@ -9,7 +9,7 @@ class SearchBox extends Component {
             <Input
                 type="text"
                 name="query"
-                className="form-control my-3"
+                className="form-control my-2"
                 placeholder="Search for PlayerName Here..."
                 value={value}
                 onChange={e=>onChange(e.currentTarget.value)}

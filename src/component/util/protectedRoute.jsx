@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Redirect, Route} from "react-router-dom";
-import {getCurrentUser} from "../../service/authService";
+import {getCurrentUser} from "../../service/auth/authService";
 
 class ProtectedRoute extends Component {
     render() {

@@ -6,7 +6,7 @@ class Input extends Component {
         const {name,label,value,onChange,error,help_text,type,placeholder} = this.props;
         return (
             <div className="form-group">
-                <label htmlFor={name}>{label}</label>
+                <label htmlFor={name} className='text-info'>{label}</label>
                 <input id={name}
                        type={type}
                        name={name}

@@ -1,0 +1,47 @@
+.homeContainer{
+
+}
+
+.panda_image{
+    height: 250px;
+    width: 250px;
+
+    position: absolute;
+    left: 10%;
+    top: 26%;
+    /*top: 0px;*/
+    /*right: 800px;*/
+    /*transform:translateY(0px);*/
+}
+.content{
+    text-align: center;
+    z-index: 1;
+
+}
+
+
+/* server time */
+.time{
+    background: rgba(209, 215, 60, 0.84);
+    text-align:center;
+}
+
+/* boss record */
+.boss-wrapper{
+    background: rgba(20, 23, 140, 0.93);
+}
+
+.bosses{
+    list-style: none;
+    color:white;
+
+}
+
+.boss{
+    background: rgb(115, 111, 30);
+    padding:.625rem;
+    margin: 10px 0;
+}
+
+/**/
+

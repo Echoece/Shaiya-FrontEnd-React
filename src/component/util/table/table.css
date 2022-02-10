@@ -1,0 +1,11 @@
+.customTable{
+    /*background: rgb(95, 95, 7);*/
+    /*background: rgb(153, 153, 12);*/
+    /*background: rgb(63, 128, 63);*/
+    background: rgb(106, 123, 200);
+    /*background: rgb(51, 62, 138);*/
+    /*background: rgb(82, 25, 88);*/
+
+    opacity: 90%;
+    font-weight: bold;
+}

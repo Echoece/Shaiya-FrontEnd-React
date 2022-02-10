@@ -1,0 +1,93 @@
+/* start of footer */
+footer{
+    background: #292828 url("Green.png") center no-repeat;
+    background-size: 100% 100%;
+    display:flex;
+    justify-content:space-between;
+
+    position: fixed;
+    left:0;
+    bottom: 0;
+    width: 100%;
+
+    overflow: hidden;
+    /*height: 80px;*/
+    /*opacity: 80%;*/
+}
+
+
+/*------------------------------*/
+
+.social{
+    /* background: rgb(211, 116, 116); */
+    align-items: center;
+    display:flex;
+    margin-left: 3rem;
+    /*font-size: 1.1em;*/
+    color: white;
+}
+
+.social a{
+    margin: .25rem;
+    padding: .25rem;
+    color: white;
+}
+
+.social a:hover{
+    color:green;
+    cursor: pointer ;
+
+}
+
+
+/*------------------------------*/
+
+.footer-links{
+
+    /* background: rgb(230, 111, 111); */
+    width:30%;
+    list-style: none;
+    vertical-align: center;
+
+}
+
+.footer-links ul{
+    display:flex;
+    justify-content:space-evenly;
+    margin: 0;
+
+}
+
+.footer-link{
+    display: inline-block;
+    padding: .25rem;
+    margin: .25rem;
+    cursor: pointer;
+    /*font-weight: bold;*/
+    /*font-size: 1.1em;*/
+    color:white;
+}
+
+.footer-link Link{
+    text-decoration: none;
+
+}
+
+.footer-link:hover{
+    color:green;
+}
+
+
+/*------------------------------*/
+.credits{
+    margin: .25rem;
+    padding: .25rem;
+    /* background: rgb(231, 97, 97);  */
+    align-items: flex-start;
+    /*display:flex;*/
+    font-size: .7rem;
+    font-weight: bold;
+    color:white;
+}
+
+/* end of footer */

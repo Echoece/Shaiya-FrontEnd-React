@@ -6,74 +6,16 @@ import Products from "./products/products";
 import {paginate} from "../../util/paginate";
 import Pagination from "../util/pagination";
 import _ from "lodash";
+import {checkout, getAllProduct} from "../../service/shop/productService";
+import Loading from "../util/loading";
+
 
 class Shop extends Component {
     state = {
-        allProducts: [
-            {
-                id: 1,
-                name: 'product 1',
-                category: 'gears',
-                price: 300,
-                description: ' custom gear made for one player only',
-                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8c2hvZXMlMjBuaWtlfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60'
-            },
-            {
-                id: 2,
-                name: 'product 2',
-                category: 'gears',
-                price: 100,
-                description: ' custom gear made for one player only',
-                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8c2hvZXMlMjBuaWtlfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60'
-            },
-            {
-                id: 3,
-                name: 'product 3',
-                category: 'weapons',
-                price: 400,
-                description: ' custom gear made for one player only',
-                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8c2hvZXMlMjBuaWtlfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60'
-            },
-            {
-                id: 4,
-                name: 'product 4',
-                category: 'capes',
-                price: 900,
-                description: ' custom gear made for one player only',
-                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8c2hvZXMlMjBuaWtlfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60'
-            },{
-                id: 5,
-                name: 'product 1',
-                category: 'gears',
-                price: 300,
-                description: ' custom gear made for one player only',
-                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8c2hvZXMlMjBuaWtlfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60'
-            },
-            {
-                id: 6,
-                name: 'product 2',
-                category: 'gears',
-                price: 100,
-                description: ' custom gear made for one player only',
-                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8c2hvZXMlMjBuaWtlfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60'
-            },
-            {
-                id: 7,
-                name: 'product 3',
-                category: 'weapons',
-                price: 400,
-                description: ' custom gear made for one player only',
-                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8c2hvZXMlMjBuaWtlfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60'
-            },
-            {
-                id: 8,
-                name: 'product 4',
-                category: 'capes',
-                price: 900,
-                description: ' custom gear made for one player only',
-                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8c2hvZXMlMjBuaWtlfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60'
-            }
-        ],
+        // product and cart data
+        allProducts: [],
+        cart:[],
+        // category for sidebar
         allCategories: [
             {
                 _id:null,
@@ -96,21 +38,37 @@ class Shop extends Component {
                 name: 'Accessories'
             }
         ],
-        cart:[],
-        id:0,
+        // pagination, sorting
         currentPage: 1,
         pageCount: 5,
-        selectedCategory: null,
-        sortColumn: {path: 'name', order: 'asc'}
+        selectedCategory: {
+            _id:null,
+            name: 'All Products'
+        },
+        sortColumn: {path: 'name', order: 'asc'},
+
+        id:0,
+        purchaseStatus: 'shopping'
     }
 
+
+    async componentDidMount() {
+        const {data:productData} = await getAllProduct();
+        //const response = await axios.get('https://jsonplaceholder.typicode.com/todos/1'); sample of async await
+        this.setState({allProducts:productData});
+    }
 
 
     render() {
         if (this.state.allProducts.length === 0)
-            return <p>there is no products available</p>
+            return (
+                <div className='container d-flex justify-content-center'>
+                    <Loading color='#79edda' type='spin'/>
+                </div>
+            )
 
-        const {allCategories, selectedCategory, pageCount, currentPage,cart} = this.state;
+        // if there is product,
+        const {allCategories, selectedCategory, pageCount, currentPage,cart, purchaseStatus,searchQuery} = this.state;
         const {totalCount, data:products} = this.getPageData();
 
 
@@ -118,10 +76,10 @@ class Shop extends Component {
             <div className='row m-2'>
                 <div className="col-2">
                     <ListGroup Items={allCategories}
-                               selectedGenre={selectedCategory}
+                               selectedOption={selectedCategory}
                                onItemSelect={this.handleOptionSelect}/>
                 </div>
-                <div className="col-7 row">
+                <div className="col-7 row" >
                     {products.map(element => <Products key={element.id} product={element} cartHandler={this.AddToCartHandle}/>)}
                     <Pagination itemCount={totalCount}
                                 pageSize={pageCount}
@@ -130,6 +88,7 @@ class Shop extends Component {
                 </div>
                 <div className="col-3">
                     <Cart items={cart}
+                          status={purchaseStatus}
                           buyAll={this.CartBuyAllHandler}
                           deleteOne={this.RemoveItemHandler}
                           deleteAll={this.CartDeleteAllHandler}/>
@@ -139,9 +98,10 @@ class Shop extends Component {
     }
 
     // category sidebar click handler
-    handleOptionSelect = (Level) => {
-        this.setState({selectedCategory: Level, searchQuery: '', currentPage: 1})
-    }
+    handleOptionSelect = (productCategory) => {
+        console.log(productCategory);
+        this.setState({selectedCategory: productCategory, currentPage: 1})
+    };
 
     // pagination page change handler
     handlePageChange = (pageNumber)=>{
@@ -170,21 +130,31 @@ class Shop extends Component {
         };
     }
 
-
     //          cart handlers
     //-------------------------------------
 
     // buy all item handler
-    CartBuyAllHandler= ()=> {
+    CartBuyAllHandler=async ()=> {
+        const goods = [...this.state.cart];
 
-    }
+        // creating DTO object for checkout request
+        let productList=[];
+        goods.map(element=> productList.push({id:element.product.id, quantity:element.quantity}) );
 
+        const {data} = await checkout(productList);
+
+        if(data==='success!')
+            this.setState({purchaseStatus:'success', cart: []})
+        else if (data === 'failed')
+            this.setState({purchaseStatus:'failed'})
+
+     }
 
     // removing single item handler
     RemoveItemHandler= (product) =>{
         let allProduct= [...this.state.cart];
-        const filtered=allProduct.filter(element => element.product !== product);
-        this.setState({cart:filtered});
+        allProduct=allProduct.filter(element => element.product !== product);
+        this.setState({cart:allProduct});
     }
 
     // delete all item handler
@@ -192,14 +162,14 @@ class Shop extends Component {
         this.setState({cart:[]})
     }
 
-    // adding product in cart, may have some room for improvement in future in the logic
+    // adding product in cart, may have some room for improvement in the logic (to-do)
     AddToCartHandle= (product,quantity)=> {
 
         const cart = [...this.state.cart];
         const productDetail = {
             product: product,
             quantity,
-            totalCost: product.price*quantity,
+            totalCost: product.price * quantity,
         }
 
         // checking if the product is already present in the cart
@@ -210,18 +180,20 @@ class Shop extends Component {
         if(!isPresent){
              updatedCart = [...cart, productDetail];
         }
+
         // if present, update the product quantity and total price
         else {
             cart.forEach(element => {
                 if(element.product=== product){
                     element.quantity += quantity;
-                    element.totalCost += product.price*quantity;
+                    element.totalCost += product.price * quantity;
                 }
             })
             updatedCart= cart;
         }
+
         // finally update the state with updated cart
-        this.setState({cart:updatedCart});
+        this.setState({cart:updatedCart,purchaseStatus: 'shopping'});
     }
 }
 

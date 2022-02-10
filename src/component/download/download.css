@@ -1,0 +1,7 @@
+.background{
+    background: url("../home/Background.jpg");
+    filter: opacity(70%);
+    z-index: 0;
+    background-clip: content-box;
+    text-align: center;
+}

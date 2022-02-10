@@ -1,0 +1,33 @@
+
+.nav_wrapper{
+    /*background: rgb(143, 60, 60);*/
+    /*width: 10vw;*/
+    display: flex;
+    justify-content: space-between;
+    background: #9cec4a no-repeat;
+    background-size: cover;
+}
+
+.nav_links{
+    list-style: none;
+    color: black;
+    display: flex;
+}
+
+.nav_link{
+    padding: 3.5em;
+    margin: .625rem;
+    background-size: cover;
+    background:  url("frame.png") center no-repeat;
+    background-size: 9em;
+    text-align: center;
+    font-size: .7rem;
+    font-weight : bold;
+    color: white;
+    text-decoration: none;
+}
+
+.nav_link:hover{
+    color: green;
+    cursor: pointer;
+}
